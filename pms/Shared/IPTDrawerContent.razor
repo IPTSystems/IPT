@@ -1,0 +1,157 @@
+@using Microsoft.AspNetCore.Components
+@inject NavigationManager Url
+<style>
+    .mdc-drawer { box-shadow: 2px 0px 2px 0px rgba(199, 199, 199, 0.29); }
+</style>
+
+<MatNavMenu Multi="true">
+    <MatNavItem Href="@Url.ToAbsoluteUri("").AbsoluteUri" NavLinkMatch="NavLinkMatch.All"><MatIcon Icon="home"></MatIcon>&nbsp; Home</MatNavItem>
+
+    @foreach (var groupModel in model)
+    {
+        <MatNavSubMenu Expanded="true">
+            <MatNavSubMenuHeader>
+                <MatNavItem AllowSelection="false">@groupModel.Group.Name</MatNavItem>
+            </MatNavSubMenuHeader>
+            <MatNavSubMenuList>
+                @foreach (var navItem in groupModel.Items)
+                {
+                    <MatNavItem Href="@Url.ToAbsoluteUri(navItem.Url).AbsoluteUri">
+                        @navItem.Name
+                    </MatNavItem>
+                }
+            </MatNavSubMenuList>
+        </MatNavSubMenu>
+    }
+
+
+</MatNavMenu>
+
+@code
+{
+
+    class NavItem
+    {
+        public NavGroup Group;
+        public string Name;
+        public string Url;
+        public int Order;
+    }
+
+    class NavGroup
+    {
+        public string Name;
+        public int Order;
+
+        public NavGroup(string name, int order = int.MaxValue)
+        {
+            Name = name;
+            Order = order;
+        }
+    }
+
+    class NavGroupModel
+    {
+        public NavGroup Group;
+        public NavItem[] Items;
+    }
+
+    NavGroupModel[] model;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        var groups = new
+        {
+            PortOperations = new NavGroup("Port Operations", 1),
+            PortConfig = new NavGroup("Port Configuration", 2),
+            IAM = new NavGroup("Stake Holder", 3),
+        };
+        var navItems = new[]
+        {
+            #region Port Operations
+            new NavItem()
+            {
+                Name = "Dashboard",
+                Url = "myDashboard",
+                Group = groups.PortOperations,
+                Order=1
+            },
+            new NavItem()
+            {
+                Name = "Vessel Journey",
+                Url = "vslJourney",
+                Group = groups.PortOperations
+            },
+            new NavItem()
+            {
+                Name = "Vessel Movement",
+                Url = "vslMovement",
+                Group = groups.PortOperations,
+            },
+            new NavItem()
+            {
+                Name = "Port Services",
+                Url = "portServices",
+                Group = groups.PortOperations,
+            },
+            #endregion Port Operations
+
+            #region Port Config
+            new NavItem()
+            {
+                Name = "Port Service Config",
+                Url = "portSvcConfig",
+                Group = groups.PortConfig,
+            },
+            new NavItem()
+            {
+                Name = "Locations",
+                Url = "locConfig",
+                Group = groups.PortConfig,
+            },
+            #endregion Port Config
+
+            #region IAM
+            new NavItem()
+            {
+                Name = "Stake holders",
+                Url = "stakeHolders",
+                Group = groups.IAM,
+            },
+            new NavItem()
+            {
+                Name = "Groups",
+                Url = "groups",
+                Group = groups.IAM,
+            },
+            #endregion Port Config
+            new NavItem()
+            {
+                Name = "Access Control",
+                Url = "accessControl",
+                Group = groups.IAM,
+            }
+        };
+
+
+        model = navItems
+            .GroupBy(i => i.Group)
+            .OrderBy(i => i.Key.Order)
+            .ThenBy(i => i.Key.Name)
+            .Select(g =>
+            {
+                return new NavGroupModel()
+                {
+                    Group = g.Key,
+                    Items = g
+                        .OrderBy(i => i.Order)
+                        .ThenBy(i => i.Name)
+                        .ToArray(),
+                };
+            })
+            .ToArray();
+    }
+
+}
