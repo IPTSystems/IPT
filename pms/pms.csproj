@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controller\" />
+    <Folder Include="MVController\" />
   </ItemGroup>
 
 </Project>

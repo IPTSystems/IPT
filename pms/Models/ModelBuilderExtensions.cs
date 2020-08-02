@@ -8,7 +8,7 @@
         public static void Seed(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RefDefinition>()
-            .HasData(new { Id = 1.0M, RefName = "ACTIVITY", RefDataLength = 10, RefDataPrecision=0,RefDataType="STR" , RefDescription = "Activities supported by the operator", Version = 0 , CreateDT = DateTime.Now, LUDT = DateTime.Now });
+            .HasData(new { Id = 1.0M, RefName = "ACTIVITY", RefDescription = "Activities supported by the operator", CreateDT = DateTime.Now, LUDT = DateTime.Now });
         }
     }
 }

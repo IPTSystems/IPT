@@ -1,15 +1,12 @@
 ﻿namespace pms.Models
 {
-    using System.ComponentModel.DataAnnotations;
-
-
-    public partial class RefValue:BaseEntity
+    public partial class RefValue : BaseEntity
     {
-        public string RefName { get; set; }
-        public string RefValue1 { get; set; }
-        public string RefValTenant { get; set; }
-        public string RefValAppScope { get; set; }
-        public string RefValDescription { get; set; }
+        public string RVName { get; set; }
+        public string RVValue { get; set; }
+        public string RVTenant { get; set; }
+        public string RVAppScope { get; set; }
+        public string RVDescription { get; set; }
         public string IsProtected { get; set; }
     }
 }
